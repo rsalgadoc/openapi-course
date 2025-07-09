@@ -1,0 +1,30 @@
+openapi: 3.0.2
+info:
+  title: OpenAPI Course
+  description: Specification for OpenAPI Course
+  termsOfService: http://example.com/terms/
+  contact:
+    name: Rodrigo Salgado
+    url: https://rsalgadoc.github.io/
+    email: rodrigo.salgado.cordova@gmail.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: "1.0"
+servers:
+- url: https://dev.example.com
+  description : Development server
+paths:
+  /v1/customers:
+    get:
+      responses:
+        200:
+          description: List of Customers
+  /v1/beers:
+    get:
+      responses:
+        200:
+          description: List of beers
+        400:
+          description: Not Found
+components: {}
