@@ -13,18 +13,111 @@ info:
   version: "1.0"
 servers:
 - url: https://dev.example.com
-  description : Development server
+  description: Development Server
+- url: https://qa.example.com
+  description: QA Server
+- url: https://prod.example.com
+  description: Production Server
 paths:
   /v1/customers:
     get:
       responses:
         200:
           description: List of Customers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerList'
   /v1/beers:
     get:
       responses:
         200:
-          description: List of beers
-        400:
-          description: Not Found
-components: {}
+          description: List of Beers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/inline_response_200'
+        404:
+          description: No Beers Found
+components:
+  schemas:
+    Address:
+      type: object
+      properties:
+        line1:
+          type: string
+          example: 123 main
+        city:
+          type: string
+          example: St Pete
+        stateCode:
+          maxLength: 2
+          minLength: 2
+          type: string
+          description: 2 Letter State Code
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+        zipCode:
+          type: string
+          example: "33701"
+    Customer:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        firstName:
+          maxLength: 100
+          minLength: 2
+          type: string
+          example: John
+        lastName:
+          maxLength: 100
+          minLength: 2
+          type: string
+          example: Thompson
+        address:
+          $ref: '#/components/schemas/Address'
+      description: customer object
+    CustomerList:
+      maxItems: 100
+      minItems: 1
+      type: array
+      description: List of Customers
+      items:
+        $ref: '#/components/schemas/Customer'
+    v1beers_brewery:
+      type: object
+      properties:
+        name:
+          type: string
+        location:
+          type: string
+    inline_response_200:
+      type: object
+      properties:
+        beerName:
+          type: string
+        style:
+          type: string
+          enum:
+          - ALE
+          - PALE_ALE
+          - IPA
+          - WHEAT
+          - LAGER
+        price:
+          type: number
+          format: float
+        quantityOnHand:
+          type: integer
+          format: int32
+        brewery:
+          $ref: '#/components/schemas/v1beers_brewery'
+      description: Beer Object
